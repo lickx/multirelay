@@ -2,7 +2,7 @@
 integer CMD_SHOW_PENDING = 91;
 integer CMD_STATUS = 21;
 
-string texture="62ba548b-0805-2505-7881-6c1f2a813cf3";
+string texture="Bar";
 
 vector textcol=<1.0,0,0>;
 

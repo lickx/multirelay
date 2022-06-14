@@ -45,7 +45,7 @@ default
             else if (str="off")
             {
                 integer index = llListFindList(sources, [id]);
-                if (index != -1) sources == llDeleteSubList(sources, index, index);
+                if (index != -1) sources = llDeleteSubList(sources, index, index);
                 if (llGetListLength(sources) == 0) { llSetTimerEvent(0); disable();}
             }
         }

@@ -22,10 +22,10 @@ float LOCKED_ALPHA = 1.0;
 float HIGH_ALPHA = 1.0;
 float LOW_ALPHA = 0.3;
 float OFF_ALPHA = 0.2;
-float alpha = BASE_ALPHA;
+float alpha = 0.7;
 string text = "";
 
-string btexture="ab75d5ec-c4fa-eaf8-3746-138002ad8125";
+string btexture="Relay";
 integer pendingprim;
 integer sourcesprim;
 
@@ -41,9 +41,12 @@ texture()
     else if (buttondown=="ask") y=0.125;
     else if (buttondown=="restricted") y=-0.125;
     else if (buttondown=="off") y=-0.375;
-    llOffsetTexture(x,y,ALL_SIDES);
-    if (buttondown=="off") llSetAlpha(0.6,ALL_SIDES);
-    else llSetAlpha(1.0,ALL_SIDES);
+    llSetLinkPrimitiveParamsFast(LINK_THIS, [PRIM_TEXTURE, ALL_SIDES, btexture, <0.5,0.25,0>, <x,y,0>, 0]);
+    if (buttondown=="off") {
+        llSetLinkPrimitiveParamsFast(LINK_THIS, [PRIM_COLOR, ALL_SIDES, <1,1,1>, 0.6]);
+    } else {
+        llSetLinkPrimitiveParamsFast(LINK_THIS, [PRIM_COLOR, ALL_SIDES, <1,1,1>, 1.0]);
+    }
 }
 
 
@@ -51,7 +54,6 @@ default
 {
     state_entry()
     {
-        llSetTexture(btexture,ALL_SIDES);
         texture();
         
         llMessageLinked(LINK_SET,CMD_SOURCES,"0",NULL_KEY);
