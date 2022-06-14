@@ -285,14 +285,14 @@ cleanqueue()
         key object=getqobj(0);
         string command=getqcom(0);
         key user=getwho(command);
-        integer auth=auth(object,user);
+        integer auth_=auth(object,user);
         if(llListFindList(on_hold,[object])!=-1) i++;
-        else if(auth==1)
+        else if(auth_==1)
         {
           deleteqitem(i);
           handlecommand(ident,object,command,TRUE);
         }
-        else if(auth==-1)
+        else if(auth_==-1)
         {
             deleteqitem(i);
             list commands = llParseString2List(command,["|"],[]);
