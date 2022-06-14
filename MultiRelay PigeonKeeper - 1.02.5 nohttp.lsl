@@ -214,7 +214,7 @@ default
             //llOwnerSay("tosend: "+msg);
             list args = llParseString2List(msg,[","],[]);
             if (index != -1) channel = llList2String(channels+tempchannels, index);
-            if ((key) channel)
+            if (osIsUUID(channel))
             {
 //                qhttp(index, msg);
             }

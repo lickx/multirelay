@@ -216,7 +216,7 @@ release(key id, string pattern)
             }
             else restrestr+="/"+behav;
         }
-        if (restrestr)
+        if (restrestr!="")
         {        //readding the source
             sources+=id;
             restrictions+=restrestr;
@@ -385,7 +385,7 @@ default
         {
             locked = (integer) str;
             if (locked) addrestriction(NULL_KEY, "detach");
-            else if (sources == []) remrestriction(NULL_KEY, "detach");
+            else if (llGetListLength(sources) == 0) remrestriction(NULL_KEY, "detach");
         }
         else if (num==CMD_REFRESH)
         {
@@ -397,15 +397,15 @@ default
         }
         else if (num==CMD_REMSRC) // warning: this signal is sent from this script, don't make infinite loops!
         {
-            if (sources == [] && !locked) remrestriction(NULL_KEY, "detach");
+            if (llGetListLength(sources) == 0 && !locked) remrestriction(NULL_KEY, "detach");
         }
     }
 
     attach(key id)    
     {
-        if (sources)
+        if (llGetListLength(sources))
         {// there are known restrictions, they must be reinstated on reattach
-            if (id)
+            if (id != NULL_KEY)
             { //reattaching meaning here we reinstate restrictions
                 // we ping devices anyway (can be useful in gridwide mode for advertising the relay new key)
                 ping(NULL_KEY);

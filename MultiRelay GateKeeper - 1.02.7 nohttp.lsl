@@ -154,7 +154,7 @@ key getwho(string cmd)
 
 integer auth(key object, key user)
 {
-    integer auth=1;
+    integer auth_=1;
     //object auth
     integer source_index=llListFindList(sources,[object]);
     if (source_index!=-1) {}
@@ -164,7 +164,7 @@ integer auth(key object, key user)
     else if (llListFindList(avwhitelist,[llGetOwnerKey(object)])!=-1) {}
     else if (mode=="auto") {}
     else if (mode=="restricted") return -1;
-    else auth=0;
+    else auth_=0;
     //user auth
     if (user==NULL_KEY) {}
 //    else if (source_index!=-1&&user==(key)llList2String(users,source_index)) {}
@@ -175,7 +175,7 @@ integer auth(key object, key user)
     else if (mode=="restricted") return -1;
     else return 0;
 
-    return auth;
+    return auth_;
 }
 
 //--- queue and command handling functions section---//
@@ -214,10 +214,15 @@ enqueue(string  msg, key id)
     string command=llToLower(llList2String(args,1))+"|"+END;
     args = [];  // free up memory in case of large messages
     //debug(msg);
-    integer auth=auth(id,getwho(command));
-    if (auth==1) handlecommand(ident,id,command,TRUE);
-    else if (auth!=-1&&getqlength()<MAXLOAD) //keeps margin for this event + next arriving chat message
-    { //debug("queue/ask: "+command);
+    integer auth_=auth(id,getwho(command));
+    if (auth_==1)
+    {
+        handlecommand(ident,id,command,TRUE);
+    }
+    else if (auth_!=-1 && getqlength()<MAXLOAD)
+    {
+        //keeps margin for this event + next arriving chat message
+        //debug("queue/ask: "+command);
         queue+=[ident, id, command];
         if (authlistener==0) dequeue();
     }
@@ -233,10 +238,10 @@ dequeue()
 {
     string command = "";
     string curident;
-    key curid;
+    key curid = NULL_KEY;
     while (command=="")
     {
-        if (queue==[])
+        if (llGetListLength(queue)==0)
         {
             llMessageLinked(LINK_SET,CMD_STATUS,"idle",NULL_KEY);
             timertype="expire";
@@ -500,7 +505,7 @@ menu()
         else if (mode == "ask") buttons+= [B_MODE_ASK];
         else if (mode == "restricted") buttons+= [B_MODE_RESTR];
         else if (mode == "off") buttons += [B_MODE_OFF];
-        if (sources == [] && mode != "off")
+        if (llGetListLength(sources) == 0 && mode != "off")
         {
             if (safe)
             {
@@ -524,7 +529,7 @@ menu()
             }                
         }
         else buttons += [" "];
-        if (sources!=[])
+        if (llGetListLength(sources))
         {
             prompt+="\nYou are currently grabbed by "+(string)llGetListLength(sources)+" object";
             if (llGetListLength(sources)==1) prompt+=".";
@@ -545,7 +550,7 @@ menu()
             else prompt+=", without safeword";
         }
         prompt += ".";
-        if (queue!=[])
+        if (llGetListLength(queue))
         {
             prompt+="\nYou have pending requests.";
             buttons+=[B_PENDING];
@@ -575,7 +580,7 @@ menu()
 */
         buttons+=[" "]; //to remove when http is put back
         buttons+=[B_HELP];
-        if(sources!=[])
+        if(llGetListLength(sources))
         {
             buttons+=[" "];
         }
@@ -766,7 +771,7 @@ default
             }
             else if (msg== B_SAFEWORD_DISABLED)
             {
-                if (sources==[]) 
+                if (llGetListLength(sources)==0) 
                 {
                     safe=TRUE;
                     enhanced_safe=FALSE;
@@ -782,7 +787,7 @@ default
             }
             else if (msg== B_SAFEWORD_ENABLED)
             {
-                if (sources==[]) 
+                if (llGetListLength(sources)==0) 
                 {
                     safe=TRUE;
                     enhanced_safe=TRUE;
@@ -792,7 +797,7 @@ default
             }                
             else if (msg==B_MODE_AUTO)
             {
-                if (sources==[])
+                if (llGetListLength(sources)==0)
                 {
                     mode="off";
                     llOwnerSay("Oh come on! No fun! Ok, I'll stop bugging you for now.");
@@ -820,7 +825,7 @@ default
             }
 //            else if (msg=="+NoRestraint")
 //            {
-//                if (sources==[])
+//                if (llGetListLength(sources)==0)
 //                {
 //                    restraining=FALSE;
 //                }
