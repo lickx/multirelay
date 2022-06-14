@@ -26,8 +26,8 @@ refresh()
 {
     last_time_worn = llGetUnixTime();
 
-    integer has_real = (real_event_queue != []);
-    integer has_online = (online_event_queue != []);
+    integer has_real = (llGetListLength(real_event_queue) > 0);
+    integer has_online = (llGetListLength(online_event_queue) > 0);
     float next_online_event = (llList2Integer(online_event_queue,0) - llGetUnixTime());
     float next_real_event = (llList2Integer(real_event_queue,0) - llGetUnixTime());    
 
@@ -135,7 +135,7 @@ shift_online_queue()
 clean_real_queue()
 {
     integer now = llGetUnixTime();
-    while (real_event_queue != [] && llList2Integer(real_event_queue, 0) <= now) start_real_event();
+    while (llGetListLength(real_event_queue) && llList2Integer(real_event_queue, 0) <= now) start_real_event();
 }
 
 default
