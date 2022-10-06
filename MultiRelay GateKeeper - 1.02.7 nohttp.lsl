@@ -15,7 +15,7 @@ integer enhanced_safe=TRUE;
 //integer restraining=TRUE;
 integer playful=FALSE;
 integer locked=FALSE;   // manual locking
-integer outfitkeeper=FALSE;
+integer outfitkeeper=TRUE;
 
 list sources=[];
 key lastuser=NULL_KEY;
@@ -742,6 +742,7 @@ default
         SIT_CHANNEL=9999 + llFloor(llFrand(9999999.0));
         llMessageLinked(LINK_THIS, CMD_STATUS, mode, NULL_KEY);
         llListen(commandChannel, "", llGetOwner(), "relay");
+        llMessageLinked(LINK_THIS,CMD_FOLDERMODE,"on",NULL_KEY);
     }
 
     touch_start(integer total_number)
