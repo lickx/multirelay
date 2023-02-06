@@ -721,6 +721,32 @@ remlistitem(string msg)
     
 }
 
+SaveSettings()
+{
+    integer imode = outfitkeeper + (safe << 1) + (enhanced_safe << 2) + (playful << 3) + (locked << 4);
+    string sDesc = "imode="+(string)imode;
+    sDesc += ",mode="+mode;
+    llSetLinkPrimitiveParamsFast(2, [PRIM_DESC, sDesc]);
+}
+
+RestoreSettings()
+{
+    string sDesc = llList2String(llGetLinkPrimitiveParams(2, [PRIM_DESC]), 0);
+    list l = llParseString2List(sDesc, ["=", ","], []);
+    integer i;
+    for (i = 0; i < llGetListLength(l); i += 2) {
+        string sKey = llList2String(l, i);
+        if (sKey == "mode") mode = llList2String(l, i+1);
+        else if (sKey == "imode") {
+            integer iValue = llList2Integer(l, i+1);
+            outfitkeeper = iValue & 1;
+            safe = iValue & 2;
+            enhanced_safe = iValue & 4;
+            playful = iValue & 8;
+            locked = iValue & 16;
+        }
+    }
+}
 
 default
 {
@@ -735,6 +761,7 @@ default
         LIST_MENU_CHANNEL=-9999 - llFloor(llFrand(9999999.0));
         LIST_CHANNEL=-9999 - llFloor(llFrand(9999999.0));
         SIT_CHANNEL=9999 + llFloor(llFrand(9999999.0));
+        RestoreSettings();
         llMessageLinked(LINK_THIS, CMD_STATUS, mode, NULL_KEY);
         llListen(commandChannel, "", llGetOwner(), "relay");
         llMessageLinked(LINK_THIS,CMD_FOLDERMODE,"on",NULL_KEY);
@@ -758,12 +785,14 @@ default
                 outfitkeeper=TRUE;
                 llMessageLinked(LINK_THIS,CMD_FOLDERMODE,"on",NULL_KEY);
                 llOwnerSay("Switching smart strip on. When items are removed that are in your shared folders, everything in the same folder will also come off.");
+                SaveSettings();
             }
             else if (msg==B_OUTFITKEEPER_ON)
             {
                 outfitkeeper=FALSE;
                 llMessageLinked(LINK_THIS,CMD_FOLDERMODE,"off",NULL_KEY);
                 llOwnerSay("Switching SmartStrip off");
+                SaveSettings();
             }
             else if (msg== B_SAFEWORD_DISABLED)
             {
@@ -772,6 +801,7 @@ default
                     safe=TRUE;
                     enhanced_safe=FALSE;
                     llOwnerSay("Oh come on! No fun! Well, at least you are kinda safe now.");
+                    SaveSettings();
                 }
                 else llOwnerSay("Nice try. Unfortunately, it is too late to change that now!");
             }
@@ -780,6 +810,7 @@ default
                 safe=FALSE;
                 enhanced_safe=FALSE;
                 llOwnerSay("Ok, safewording is disabled now. Hope you know what you are doing! (sadistic laughters!)");
+                SaveSettings();
             }
             else if (msg== B_SAFEWORD_ENABLED)
             {
@@ -788,6 +819,7 @@ default
                     safe=TRUE;
                     enhanced_safe=TRUE;
                     llOwnerSay("OK, a bit more fun! Especially when you are not alone!");
+                    SaveSettings();
                 }
                 else llOwnerSay("Nice try. Unfortunately, it is too late to change that now!");
             }                
@@ -803,21 +835,25 @@ default
                     mode="restricted";
                     llOwnerSay("Nice try. Unfortunately, the relay is currently locked. The best we can do is switch to Restricted mode.");
                 }
+                SaveSettings();
             }
             else if (msg==B_MODE_RESTR)
             {
                 mode="ask";
                 llOwnerSay("The relay is now working in Ask mode. You will be asked for authorization from unknown sources.");
+                SaveSettings();
             }
             else if (msg==B_MODE_ASK)
             {
                 mode="auto";
                 llOwnerSay("The relay is now working in Auto mode. All requests will be accepted except explicitly forbidden ones.");
+                SaveSettings();
             }
             else if (msg==B_MODE_OFF)
             {
                 mode="restricted";
                 llOwnerSay("The relay is now working in Restricted mode. All requests will be denied except the explictly allowed ones.");
+                SaveSettings();
             }
 //            else if (msg=="+NoRestraint")
 //            {
@@ -835,11 +871,13 @@ default
             {
                 playful=TRUE;
                 llOwnerSay("Playful mode enbled. Every one-shot (non-restricting) command is accepted.");
+                SaveSettings();
             }
             else if (msg== B_PLAYFUL_ENABLED)
             {
                 playful=FALSE;
                 llOwnerSay("Playful mode disabled. Tired of being played with? Ok, you'll be left alone now.");
+                SaveSettings();
             }
             else if (msg== B_RELAY_STATE)
             {
