@@ -458,11 +458,11 @@ default
         if (Method == URL_REQUEST_GRANTED) {
             url = body+"/RLVR";
             llMessageLinked(LINK_THIS, CMD_URL, url, NULL_KEY);
-            llOwnerSay("Http-in enabled on: "+url);
+            //llOwnerSay("Http-in enabled on: "+url);
         }
         else if (Method == URL_REQUEST_DENIED)
         {
-            llOwnerSay("No URLs free !");
+            llOwnerSay("No URLs free or sim badly configured!");
         }
         else //if (Method == "GET")
         {
