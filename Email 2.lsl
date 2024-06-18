@@ -8,7 +8,6 @@ string GetMailHostname()
     string sHostname = llGetEnv("objectmail_hostname");
     if (sHostname == "") {
         string sChannel = llGetEnv("sim_channel");
-        llOwnerSay(sChannel);
         if (llSubStringIndex(sChannel, "Second Life")==0) return "@lsl.secondlife.com";
         else if (llSubStringIndex(sChannel, "OpenSim")==0) return "@lsl.opensim.local";
     }
