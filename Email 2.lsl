@@ -1,7 +1,6 @@
 integer EMAIL1=72;
 integer length;
 string protocol="ORG encapsulated RLVR protocol,005,";
-string hostname;
 
 string GetMailHostname()
 {
@@ -18,10 +17,9 @@ default
 {
     state_entry()
     {
-        hostname = GetMailHostname();
-        length = llStringLength((string)NULL_KEY+hostname);
+        length = llStringLength((string)NULL_KEY+GetMailHostname());
     }
-    
+
     link_message(integer l, integer n, string m, key i)
     {
         if (n==EMAIL1)
@@ -34,7 +32,7 @@ default
 
     changed(integer i)
     {
-        if (i & CHANGED_REGION) hostname = GetMailHostname();
+        if (i & CHANGED_REGION) length = llStringLength((string)NULL_KEY+GetMailHostname());
     }
 }
 
