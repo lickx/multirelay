@@ -20,6 +20,11 @@ default
         length = llStringLength((string)NULL_KEY+GetMailHostname());
     }
 
+    on_rez(integer i)
+    {
+        length = llStringLength((string)NULL_KEY+GetMailHostname());
+    }
+
     link_message(integer l, integer n, string m, key i)
     {
         if (n==EMAIL1)
