@@ -4,7 +4,7 @@ string protocol="ORG encapsulated RLVR protocol,005,";
 
 string GetMailHostname()
 {
-    string sHostname = llGetEnv("objectmail_hostname");
+    string sHostname = llGetEnv("mailname");
     if (sHostname == "") {
         string sChannel = llGetEnv("sim_channel");
         if (llSubStringIndex(sChannel, "Second Life")==0) return "@lsl.secondlife.com";
