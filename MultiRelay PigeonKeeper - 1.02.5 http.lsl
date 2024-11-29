@@ -52,14 +52,14 @@ integer email_sources = 0;
 integer email_tempsources = 0;
 string address;
 integer nonce;
-key session;
+key session = NULL_KEY;
 integer session_date;
 
 //integer email_mode = FALSE;
 
 integer garbage_rate = 180; //garbage collection rate
 
-key cursource;
+key cursource = NULL_KEY;
 string curmsg;
 integer cursender;
 
@@ -69,7 +69,7 @@ string url;
 string END = "$$";
 
 integer safewordPending;
-key safewordPendingFor;
+key safewordPendingFor = NULL_KEY;
 
 
 
@@ -471,7 +471,7 @@ default
             
             if (llGetHTTPHeader(id, "x-path-info")!="/RLVR") //Added a reply so the external server wont wait for timeout
             {
-                llHTTPResponse(id, 200, "ERROR: Not reconised");
+                llHTTPResponse(id, 200, "ERROR: Not recognised");
                 return;
             }
             
@@ -519,7 +519,7 @@ default
 
     attach(key id)
     {
-        if (id) newurl();
+        if (id != NULL_KEY) newurl();
         else llReleaseURL(url);
     }
 

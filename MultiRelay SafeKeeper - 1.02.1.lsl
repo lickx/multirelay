@@ -24,7 +24,7 @@ list blockers=[];
 integer saviorListener;
 string relayOwnerName;
 
-key sourceToSafeword;
+key sourceToSafeword = NULL_KEY;
 
 integer randint(integer max)
 {
