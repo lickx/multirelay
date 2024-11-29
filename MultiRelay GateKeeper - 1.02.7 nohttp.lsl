@@ -119,7 +119,7 @@ string END = "$$";
 /*
 string url="ko";
 integer dns = FALSE;
-key reqid;
+key reqid = NULL_KEY;
 string DNS="http://witchy-app.appspot.com/relaydb/";
 */
 
